@@ -1,6 +1,4 @@
-# C++ programming project
-
-## 
+# Media-Player C++ programming project
 
 ### Features
 
