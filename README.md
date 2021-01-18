@@ -1,13 +1,6 @@
-# ELEC-A7151-2018: C++ programming project
+# C++ programming project
 
-## Group 8 Media Player
-
-### Members
-
-- Anton Saukkonen (704436)
-- Eeli Lamponen (596569)
-- Miikka Runolinna (660246)
-- Henrik Hoppania (595997)
+## 
 
 ### Features
 
