@@ -15,7 +15,7 @@ Simple Media-Player developed with C++ and Qt. Developed at 2019 for the course 
 - Sorting the playlist with different sorting criteria
 - Separate video player which supports the playback of *.wmv files
 
-####TODO: 
+#### TODO: 
 
 - Improve memory usage e.g. by using smart pointers. 
 - Add audio vizualzation feature.
