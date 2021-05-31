@@ -1,4 +1,4 @@
-Simple Media-Player developed with C++ and Qt. Developed at 2019 for the course "Object-Oriented Programming with C++" at Aalto university. 
+Simple Media-Player developed with C++ and Qt. Developed at 2018 for the course "Object-Oriented Programming with C++" at Aalto university. 
 
 #### Basic Features
 
