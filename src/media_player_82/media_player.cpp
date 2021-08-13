@@ -3,7 +3,7 @@
 * @class_name:
 * @description:
 * @version:
-* @author: @henrik, @antsaukk, @miikka
+* @authors: @henrik, @antsaukk, @miikka
 */
 
 #include <QtCore>
@@ -40,7 +40,6 @@ media_player::media_player(QWidget *parent) :
     shadowEffect = new QGraphicsDropShadowEffect(this);
     shadowEffect->setBlurRadius(9);
     shadowEffect->setOffset(10);
-    //Anton *****************************************************
     visualPlaylistMOdel = new QStandardItemModel(this);
     ui->playlistView->setModel(visualPlaylistMOdel);
     visualPlaylistMOdel->setHorizontalHeaderLabels(QStringList() << tr("Load music here") << tr("File path"));
@@ -60,11 +59,10 @@ media_player::media_player(QWidget *parent) :
     ui->button_shuffle->setStyleSheet(customization::getShuffleStyleSheet());
     ui->button_minimize->setStyleSheet(customization::getMinimizationStyleSheet());
     ui->playlistView->setStyleSheet(customization::getTableViewStyleSheet());
-    ui->playlistView->setContextMenuPolicy(Qt::CustomContextMenu); //new
-    ui->playlistView->horizontalHeader()->setContextMenuPolicy(Qt::CustomContextMenu); //new
+    ui->playlistView->setContextMenuPolicy(Qt::CustomContextMenu);
+    ui->playlistView->horizontalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
     ui->mute_butten->setStyleSheet(customization::getMuteStyleSheet());
     ui->video_button->setStyleSheet(customization::getVideoStyleSheet());
-    //Anton *****************************************************
 
     player = new QMediaPlayer(this);
     musicPlaylist = new playlist;
@@ -77,15 +75,13 @@ media_player::media_player(QWidget *parent) :
     connect(player, &QMediaPlayer::durationChanged, this, &media_player::on_durationChanged);
     connect(playbackTimer, SIGNAL(timeout()), this, SLOT(playback_time_state_control()));
     connect(ui->playlistView, SIGNAL(customContextMenuRequested(QPoint)),
-            SLOT(customContextMenuForMetadataEdit(QPoint))); //new
-    connect(ui->playlistView->horizontalHeader(), SIGNAL(customContextMenuRequested(QPoint)),  //new
+            SLOT(customContextMenuForMetadataEdit(QPoint)));
+    connect(ui->playlistView->horizontalHeader(), SIGNAL(customContextMenuRequested(QPoint)),
             SLOT(customContextMenuForPlaylistSorting(QPoint))); //new
     connect(ui->playlistView, &QTableView::doubleClicked, [this](const QModelIndex &index){ //lambda expression to catch up the index of song from QTable
         auto invokedPlaylist = musicPlaylist->getPlayList();
         unsigned int invokedIndex = unsigned(index.row());
-//        qDebug() << "TESTING THE INVOKED INDEX: " << invokedIndex;
         musicPlaylist->resetPlaybackControl(invokedIndex);
-//        qDebug() << "Iteration variable now is:" << musicPlaylist->getPlaybackControl().getPosition();
         setThisSongOnPlayback(invokedPlaylist[invokedIndex]);
     });
 
@@ -120,10 +116,6 @@ media_player::media_player(QWidget *parent) :
     ui->volume_slider->setStyleSheet(customization::getSliderStyleSheet());
 
     videoPlayer = new video_player();
-
-    //std::thread t1 (this);
-    //std::thread t2 (videoPlayer);
-
 
     loadDefaultMP3Library();
 
@@ -193,8 +185,6 @@ void media_player::addSongsByFilename(QStringList filenames)
         QList <QStandardItem*> listOfSongNames;
         listOfSongNames.append(new QStandardItem(setInVisualTable));
         visualPlaylistMOdel->appendRow(listOfSongNames);
-//        qDebug() << "success"; //testing
-//        musicPlaylist->printOrderedPlaylist(1); //testing
     }
 }
 
@@ -220,7 +210,6 @@ void media_player::loadDefaultMP3Library()
 void media_player::playback_time_state_control()
 {
     if (player->mediaStatus() == 7) setPlayback();
-    //qDebug() << "playing...";
 }
 
 /*
@@ -273,8 +262,6 @@ void media_player::customContextMenuForMetadataEdit(QPoint position)
 */
 void media_player::changeNameOfMedia(int invokedRowIndex)
 {
-//    qDebug() << "here";
-//    qDebug() << "Testing invoked index: " << invokedRowIndex;
     if (musicPlaylist->getLength() > 0 || invokedRowIndex >= 0) {
         bool checkUserInput;
         QString userInput = QInputDialog::getText(this, tr("EDIT NAME"), tr("Enter song name below"), QLineEdit::Normal,
@@ -282,9 +269,7 @@ void media_player::changeNameOfMedia(int invokedRowIndex)
         if (checkUserInput && !userInput.isEmpty()){
             std::string updatedSongName = userInput.toStdString();
             auto mediaObjectToBeChanged = musicPlaylist->getPlayList()[unsigned(invokedRowIndex)];
-//            std::cout << "Song with old name: " << mediaObjectToBeChanged.getID3Tag().getSongName() << std::endl;
             mediaObjectToBeChanged.getID3Tag().setSongName(updatedSongName);
-//            std::cout << "Song with updated name: " << mediaObjectToBeChanged.getID3Tag().getSongName() << std::endl;
             resetVisualPlaylist(7);
         }
     } else qDebug() << "Invoked index is invalid or playlist is empty!";
@@ -299,8 +284,6 @@ void media_player::changeNameOfMedia(int invokedRowIndex)
 */
 void media_player::changeNameOfTheArtist(int invokedRowIndex)
 {
-//    qDebug() << "here";
-//    qDebug() << "Testing invoked index: " << invokedRowIndex;
     if (musicPlaylist->getLength() > 0 || invokedRowIndex >= 0) {
         bool checkUserInput;
         QString userInput = QInputDialog::getText(this, tr("EDIT ARTIST"), tr("Enter artist name below"), QLineEdit::Normal,
@@ -308,9 +291,7 @@ void media_player::changeNameOfTheArtist(int invokedRowIndex)
         if (checkUserInput && !userInput.isEmpty()){
             std::string updatedArtistName = userInput.toStdString();
             auto mediaObjectToBeChanged = musicPlaylist->getPlayList()[unsigned(invokedRowIndex)];
-//            std::cout << "Artist with old name: " << mediaObjectToBeChanged.getID3Tag().getArtist() << std::endl;
             mediaObjectToBeChanged.getID3Tag().setArtist(updatedArtistName);
-//            std::cout << "Artist with updated name: " << mediaObjectToBeChanged.getID3Tag().getArtist() << std::endl;
             resetVisualPlaylist(7);
         }
     } else qDebug() << "Invoked index is invalid or playlist is empty!";
@@ -326,8 +307,6 @@ void media_player::changeNameOfTheArtist(int invokedRowIndex)
 */
 void media_player::changeNameOfTheRelease(int invokedRowIndex)
 {
-//    qDebug() << "here";
-//    qDebug() << "Testing invoked index: " << invokedRowIndex;
     if (musicPlaylist->getLength() > 0 || invokedRowIndex >= 0) {
         bool checkUserInput;
         QString userInput = QInputDialog::getText(this, tr("EDIT RELEASE"), tr("Enter album name below"), QLineEdit::Normal,
@@ -335,13 +314,10 @@ void media_player::changeNameOfTheRelease(int invokedRowIndex)
         if (checkUserInput && !userInput.isEmpty()){
             std::string updatedAlbumName = userInput.toStdString();
             auto mediaObjectToBeChanged = musicPlaylist->getPlayList()[unsigned(invokedRowIndex)];
-//            std::cout << "Artist with old name: " << mediaObjectToBeChanged.getID3Tag().getAlbum() << std::endl;
             mediaObjectToBeChanged.getID3Tag().setAlbum(updatedAlbumName);
-//            std::cout << "Artist with updated name: " << mediaObjectToBeChanged.getID3Tag().getAlbum() << std::endl;
             if (checkPlaybackPosition(unsigned(invokedRowIndex))){
                 auto song = musicPlaylist->getPlayList()[unsigned(invokedRowIndex)];
                 const char *labelToSet = song.getID3Tag().getAlbum().c_str();
-//                qDebug() << labelToSet;
                 visualPlaylistMOdel->setHorizontalHeaderLabels(QStringList() << tr("Album playing: ") + tr(labelToSet));
             }
         }
@@ -351,14 +327,12 @@ void media_player::changeNameOfTheRelease(int invokedRowIndex)
 /*
 * AALTO C++ media_player_8
 * @function_type:
-* @desc:
+* @desc: check if the song is still on playback
 * @param:
 * @return:
 */
-void media_player::deleteSelectedSong(int invokedRowIndex) //check if the song is still on playback
+void media_player::deleteSelectedSong(int invokedRowIndex)
 {
-//    qDebug() << "here";
-//    qDebug() << "Testing invoked index: " << invokedRowIndex;
     if (musicPlaylist->getLength() > 0 || invokedRowIndex >= 0){
         if (checkPlaybackPosition(unsigned(invokedRowIndex))) {
             player->stop();
@@ -511,7 +485,6 @@ void media_player::on_stop_button_clicked()
 void media_player::on_durationChanged(int position)
 {
     ui->progress_slider->setMaximum(position);
-
     time_to_end(position);
 }
 
@@ -519,7 +492,6 @@ void media_player::on_durationChanged(int position)
 void media_player::on_positionChanged(int position)
 {
     ui->progress_slider->setValue(position);
-
     time_passed(position);
 }
 
@@ -536,9 +508,6 @@ void media_player::on_button_file_clicked()
     addSongsByFilename(filenames);
 
     visualPlaylistMOdel->setHorizontalHeaderLabels(QStringList() << tr("Track name"));
-        //QStringList filenames = QFileDialog::getOpenFileNames(this,"Select one or more files to playlist","/Users", "Music (*.mp3)");
-        //addSongsByFilename(filenames);
-
 }
 
 void media_player::setThisSongOnPlayback(Song &song)
@@ -552,9 +521,7 @@ void media_player::setThisSongOnPlayback(Song &song)
         }
         else visualPlaylistMOdel->setHorizontalHeaderLabels(QStringList() << tr("Track name"));
         player->play();
-//        qDebug() << "------------------TESTING THE TIMER------------------";
         playbackTimer->start(1000);
-//        qDebug() << "*timer started";
     }
     else
     {
@@ -579,14 +546,13 @@ void media_player::setPlayback()
         visualPlaylistMOdel->setHorizontalHeaderLabels(QStringList() << tr("Album playing:") + tr(labelToSet));
     }
     else visualPlaylistMOdel->setHorizontalHeaderLabels(QStringList() << tr("Track name"));
-//    update_album_art(songs[index]);
     player->play();
 }
 
 /*
 * AALTO C++ media_player_8
 * @function_type:
-* @desc:
+* @desc: If over 3 seconds has passed, replay the same song, Otherwise play the previous song
 * @param:
 * @return:
 */
@@ -594,10 +560,10 @@ void media_player::on_button_previous_clicked()
 {
     if (musicPlaylist->getLength() > 0)
     {
-        if (player->position() >= 3000) { // If over 3 seconds has passed, replay the same song
+        if (player->position() >= 3000) {
             player->setPosition(0);
         }
-        else { // Otherwise play the previous song
+        else {
             auto index = musicPlaylist->back();
             auto songs = musicPlaylist->getPlayList();
             setThisSongOnPlayback(songs[index]);
@@ -628,9 +594,6 @@ void media_player::on_button_next_clicked()
         qDebug()<<"Playlist empty";
     }
 }
-
-// mute and unmute the audio
-
 
 /*
 * AALTO C++ media_player_8
@@ -677,13 +640,12 @@ void media_player::resetVisualPlaylist(unsigned int signal)
         {
             QString metaDataToSet = QString::fromStdString(song.getID3Tag().getArtist() +
                                                                                 " - " + song.getID3Tag().getSongName());
-//            std::cout << metaDataToSet.toStdString() << std::endl;
             QList <QStandardItem*> listOfContent;
             listOfContent.append(new QStandardItem(metaDataToSet));
             visualPlaylistMOdel->appendRow(listOfContent);
         }
     }
-    else qDebug() << "No songs in playlist!"; //testing
+    else qDebug() << "No songs in playlist!";
 }
 
 /*
@@ -708,15 +670,6 @@ void media_player::on_button_shuffle_clicked()
 * moved top lef of the screen and the window cannot be scaled
 * @param:
 * @return:
-*/
-
-/*for(int i = 1; i < ui->dont_show_mini->count(); ++i)
-        {
-            for(int j = 0; j < ui->dont_show_mini->itemAt(i)->layout()->count(); ++j)
-            {
-                ui->dont_show_mini->itemAt(i)->layout()->itemAt(j)->widget()->setVisible(true);
-            }
-        }
 */
 void media_player::on_button_minimize_clicked()
 {
@@ -751,26 +704,19 @@ void media_player::dragEnterEvent(QDragEnterEvent *event)
 
 void media_player::dropEvent(QDropEvent *event)
 {
-    QList<QUrl> urlList = event->mimeData()->urls(); // Get the QUrl list from the drag and drop action
+    QList<QUrl> urlList = event->mimeData()->urls();
     for (auto url : urlList) {
-        Song song(url); // Construct the song
-        musicPlaylist->addMediaItem(song); // Add it to the playlist
+        Song song(url);
+        musicPlaylist->addMediaItem(song);
         QString setInVisualTable = QString::fromStdString(song.getID3Tag().getArtist() +
                                                           " - " + song.getID3Tag().getSongName());
-//        std::cout << setInVisualTable.toStdString() << std::endl;
         QList <QStandardItem*> listOfSongNames;
         listOfSongNames.append(new QStandardItem(setInVisualTable));
         visualPlaylistMOdel->appendRow(listOfSongNames);
-//        qDebug() << "success"; //testing
-        musicPlaylist->printOrderedPlaylist(1); //testing
-
-//        qDebug() << "Dropped file:" << url.toLocalFile(); // For debugging purposes
+        musicPlaylist->printOrderedPlaylist(1); 
     }
-    //ui->number_of_songs_in_playlist->display(int(musicPlaylist->getLength())); // Also for debugging
 }
 
-
-//Convert milliseconds to QString w/ minutes and seconds
 QString media_player::converter(int position)
 {
     int all_sek = position/100;
@@ -795,19 +741,16 @@ QString media_player::converter(int position)
     return QString(minS+":"+sekS+":"+sek_sS);
 }
 
-//Display the time passed
 void media_player::time_passed(int position)
 {
     ui->lineEdit_2->setText(converter(position));
 }
 
-//Display the time untill the end of the song
 void media_player::time_to_end(int position)
 {
     ui->lineEdit->setText(converter(position));
 }
 
-//Mute the music
 void media_player::on_mute_butten_clicked()
 {
     std::cout<<"mute pressed"<<std::endl;
@@ -821,19 +764,15 @@ void media_player::on_mute_butten_clicked()
     }
 }
 
-//Show videoplayer
 void media_player::on_video_button_clicked()
 {
     if(videoPlayer->isHidden())
     {
         videoPlayer->show();
-        //ui->video_button->setText("Show video");
     }
     else
     {
         videoPlayer->hide();
-        //ui->video_button->setText("Hide  video");
-
     }
 }
 
@@ -848,12 +787,4 @@ void media_player::update_album_art(Song &song)
         pic.loadFromData(arr);
         ui->label->setPixmap(pic);
     }
-    /*
-    else
-    {
-        QPixmap *pic;
-        pic = new QPixmap(":/new/prefix1/playing.png");
-        ui->label->setPixmap(pic->scaled(ui->label->size()*3+QSize(0,300),Qt::KeepAspectRatio));
-    }*/
-
 }

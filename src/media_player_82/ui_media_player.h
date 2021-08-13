@@ -217,7 +217,7 @@ public:
         retranslateUi(media_player);
 
         QMetaObject::connectSlotsByName(media_player);
-    } // setupUi
+    }
 
     void retranslateUi(QDialog *media_player)
     {
@@ -234,13 +234,13 @@ public:
         mute_butten->setText(QString());
         label->setText(QApplication::translate("media_player", "Album art", nullptr));
         lineEdit->setText(QString());
-    } // retranslateUi
+    }
 
 };
 
 namespace Ui {
     class media_player: public Ui_media_player {};
-} // namespace Ui
+}
 
 QT_END_NAMESPACE
 

@@ -51,8 +51,6 @@ int Tester::metadata_tests()
 
     Song song = m->getPlaylist()->getPlayList()[0];
 
-    // setSongName
-
     std::string oldSongName = song.getID3Tag().getSongName();
     std::string testName = "testName";
     song.getID3Tag().setSongName(testName);

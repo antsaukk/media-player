@@ -93,7 +93,6 @@ bool playlist::removeMediaItem(Song &songToRemove)
             return true;
         }
     }
-//    qDebug() << "error, song name is not matching";
     return false;
 }
 
@@ -109,7 +108,7 @@ bool playlist::clearPlaylist()
     if (lengthOfPlaylist > 0) {
         updateTheLengthOfPlaylist(int(-lengthOfPlaylist));
         playlistOfSongsObjects.clear();
-        printPlaylist(); //testing function
+        printPlaylist();
         return true;
     } else qDebug() << "Playlist is already empty!";
     return false;
@@ -136,15 +135,11 @@ void playlist::printPlaylist()
 */
 void playlist::updateTheLengthOfPlaylist(int factor)
 {
-    //qDebug() << "before incremention length of playlist is " << lengthOfPlaylist;//test
-    //qDebug() << "length of playlist is going to be changed by a factor "; //test
     lengthOfPlaylist += factor;
-    //qDebug() << "after incremention length of playlist is " << lengthOfPlaylist;//test
     playbackIterator.updateMaxValue(getLength());
     if (lengthOfPlaylist == 0){
     playbackIterator.updateIterationVariable(nullIteration);
     qDebug() << "Playlist is empty";
-    //qDebug() << "Now the iteration index is: " << playbackIterator.getPosition(); //test
     }
 }
 
@@ -181,7 +176,7 @@ bool byArtist(Song &firstElement, Song &secondElement)
 */
 bool byAlbumRelease(Song &firstElement, Song &secondElement)
 {
-    return firstElement.getID3Tag().getAlbum() < secondElement.getID3Tag().getAlbum(); //not yet implemented
+    return firstElement.getID3Tag().getAlbum() < secondElement.getID3Tag().getAlbum();
 }
 
 /*
@@ -198,10 +193,7 @@ void playlist::orderPlaylistAlphabeticallyBySongName()
     if (lengthOfPlaylist > 0) {
         sort(playlistOfSongsObjects.begin(), playlistOfSongsObjects.end(), bySongName);
         playbackIterator.updateIterationVariable(nullIteration);
-//        qDebug() << "Playlist is ordered by Song name";
-        //qDebug() << "Now the iteration index is: " << playbackIterator.getPosition(); //test
-//        qDebug() << "Playback will start from the beginning of playlist"; //test
-        printOrderedPlaylist(1); //testing command
+        printOrderedPlaylist(1);
     }
     else qDebug() << "Playlist is empty, sorting is not possible";
 }
@@ -220,9 +212,6 @@ void playlist::orderPlaylistByArtist()
     if (lengthOfPlaylist > 0) {
         sort(playlistOfSongsObjects.begin(), playlistOfSongsObjects.end(), byArtist);
         playbackIterator.updateIterationVariable(nullIteration);
-//        qDebug() << "Playlist is ordered by Artist";
-        //qDebug() << "Now the iteration index is: " << playbackIterator.getPosition(); //test
-//        qDebug() << "Playback will start from the beginning of playlist"; //test
         printOrderedPlaylist(2);
     }
     else qDebug() << "Playlist is empty, sorting is not possible";
@@ -242,9 +231,6 @@ void playlist::orderPlaylistByRelease()
     if (lengthOfPlaylist > 0) {
         sort(playlistOfSongsObjects.begin(), playlistOfSongsObjects.end(), byAlbumRelease);
         playbackIterator.updateIterationVariable(nullIteration);
-//        qDebug() << "Playlist is ordered by Album";
-        //qDebug() << "Now the iteration index is: " << playbackIterator.getPosition(); //test
-//        qDebug() << "Playback will start from the beginning of playlist"; //test
         printOrderedPlaylist(3);
     }
     else qDebug() << "Playlist is empty, sorting is not possible";
@@ -263,10 +249,6 @@ void playlist::shuffleList()
 {
     std::random_shuffle(playlistOfSongsObjects.begin(), playlistOfSongsObjects.end());
     playbackIterator.updateIterationVariable(nullIteration);
-//    qDebug() << "Playlist is shuffled";
-    //qDebug() << "Now the iteration index is: " << playbackIterator.getPosition(); //test
-//    qDebug() << "Playback will start from the beginning of playlist"; //test
-
 }
 
 /*
@@ -301,9 +283,6 @@ void playlist::printOrderedPlaylist(unsigned int n)
     }
 }
 
-/*************************************playlistIterator_functions*************************************/
-
-
 /*
 * AALTO C++ media_player_8
 * @function_type: controller function for iterator index
@@ -319,15 +298,11 @@ bool playlistIterator::playbackIndexController()
     switch (getFlag()) {
     case 0:
         if (iterator_index > min_value){
-            //qDebug() << "current index is " << iterator_index;
-            //qDebug() << "min value is " << min_value;
             return true;
         }
         return false;
     case 1:
         if (iterator_index < max_value) {
-            //qDebug() << "current index is " << iterator_index;
-            //qDebug() << "max value is " << max_value;
             return true;
         }
         return false;
@@ -346,10 +321,8 @@ bool playlistIterator::playbackIndexController()
 unsigned int playlistIterator::stepForward()
 {
     if (playbackIndexController()) {
-        //qDebug() << "incremention is allowed ";
         iterator_index += 1;
     } else {
-//        qDebug() << "iterator index is on the border, incremetion is not allowed. Index returns to the beginning of playlist";
         iterator_index = 0;
     }
 
@@ -367,10 +340,8 @@ unsigned int playlistIterator::stepForward()
 unsigned int playlistIterator::stepBack()
 {
     if (playbackIndexController()) {
-        //qDebug() << "decremention is allowed ";
         iterator_index -= 1;
     } else {
-//         qDebug() << "iterator index is on the border, decremention is not allowed. Index returns to the end of the playlist.";
         iterator_index = max_value;
     }
     return iterator_index;

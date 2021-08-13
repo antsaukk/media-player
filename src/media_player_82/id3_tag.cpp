@@ -26,11 +26,6 @@ ID3_Tag::ID3_Tag(std::string filename_) : header(headerLength)
 
     initFrames(is);
     is.close();
-
-    // For debugging
-    /*for (auto frame : frames) {
-        std::cout << frame->getID() << ": " << frame->getValue() << " " << frame->getFrameSize() << std::endl;
-    }*/
 }
 
 ID3_Tag::~ID3_Tag()

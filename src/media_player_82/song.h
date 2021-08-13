@@ -4,20 +4,20 @@
 #include <QMediaContent>
 #include "id3_tag.h"
 
-
-// A Song object to be used in a QMediaPlaylist. Uses the QMediaContent functionality,
-// with added support to handle the metadata of the file
-
+/*
+* AALTO C++ media_player_8
+* @function_type:
+* @desc: A Song object to be used in a QMediaPlaylist. Uses the QMediaContent functionality,
+  with added support to handle the metadata of the file
+* @param:
+* @return:
+*/
 class Song : public QMediaContent
 {
 public:
     Song(const QUrl &url);
 
     ~Song();
-
-//    Song(const Song &song);
-
-//    Song& operator= (const Song &song);
 
     ID3_Tag& getID3Tag() { return *id3Tag; }
 
